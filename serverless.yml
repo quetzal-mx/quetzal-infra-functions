@@ -12,9 +12,25 @@ provider:
   runtime: nodejs10.x
 
 functions:
-  hello:
-    handler: handler.hello
-    events:
-      - http:
-          method: get
-          path: hello
+  createStack:
+    handler: src/functions/create-stack/index.handle
+    timeout: 40
+
+resources:
+  Resources:
+    IamRoleLambdaExecution:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument: 
+          Version: '2012-10-17'
+          Statement: 
+            - Effect: Allow
+              Principal: 
+                Service: 
+                  - lambda.amazonaws.com
+                  - edgelambda.amazonaws.com
+              Action: 'sts:AssumeRole'
+        ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/AWSCodePipelineCustomActionAccess
+          - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+          - arn:aws:iam::aws:policy/AmazonS3FullAccess

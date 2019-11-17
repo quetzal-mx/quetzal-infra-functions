@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
-    "lib": ["es2017"],
-    "moduleResolution": "node",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "sourceMap": true,
-    "target": "es2017",
-    "outDir": "lib"
+    "composite": true
   },
-  "exclude": ["node_modules"]
+  "files": [],
+  "include": [],
+  "references": [
+    { "path": "./tsconfig.build.json" },
+    { "path": "./tsconfig.test.json" }
+  ]
 }
