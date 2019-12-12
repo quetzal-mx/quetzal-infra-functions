@@ -11,10 +11,16 @@ provider:
   name: aws
   runtime: nodejs10.x
 
+package:
+  individually: true
+
 functions:
   createStack:
     handler: src/functions/create-stack/index.handle
-    timeout: 40
+    timeout: 60
+  uploadZipS3:
+    handler: src/functions/upload-zip-s3/index.handle
+    timeout: 60
 
 resources:
   Resources:

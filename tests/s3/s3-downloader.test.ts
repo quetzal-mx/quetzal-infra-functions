@@ -1,4 +1,4 @@
-import { S3Downloader } from '../../src/s3-downloader';
+import { S3Downloader } from '../../src/s3';
 import * as S3 from 'aws-sdk/clients/s3';
 
 describe('S3Downloader', () => {
