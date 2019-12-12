@@ -1,6 +1,6 @@
 import { injectable, inject } from 'inversify';
 import { Advised } from 'aspect.js';
-import { IS3Downloader } from '../../s3-downloader';
+import { IS3Downloader } from '../../s3';
 import { IZip } from '../../zip';
 
 export interface IS3ZipDownloadUseCaseDependencies {

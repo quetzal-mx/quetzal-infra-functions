@@ -5,7 +5,8 @@ configure({
     console: {
       type: 'console',
       layout: {
-        type: 'basic' 
+        type: 'pattern',
+        pattern: '[%c] %m', 
       }
     }
   },

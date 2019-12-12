@@ -1,12 +1,12 @@
 import { aroundMethod, asyncOnThrowOfMethod, Metadata} from 'aspect.js';
-import { CreateStackHandler } from './create-stack';
+import { UploadZipS3Handler } from './upload-zip-s3';
 import { getLogger } from 'log4js';
 
-const logger = getLogger('CreateStackHandler');
+const logger = getLogger('UploadZipS3Handler');
 
-export default class CreateStackHandlerAspect {
+export default class UploadZipS3HandlerAspect {
   @aroundMethod({
-    classes: [CreateStackHandler],
+    classes: [UploadZipS3Handler],
     methodNamePattern: /handle/
   })
   public async logHandle(data: Metadata) {
@@ -25,7 +25,7 @@ export default class CreateStackHandlerAspect {
   }
 
   @aroundMethod({
-    classes: [CreateStackHandler],
+    classes: [UploadZipS3Handler],
     methodNamePattern: /putJob.*/
   })
   public async logPutJobResult(data: Metadata) {
@@ -46,7 +46,7 @@ export default class CreateStackHandlerAspect {
   }
 
   @asyncOnThrowOfMethod({
-    classes: [CreateStackHandler],
+    classes: [UploadZipS3Handler],
     methodNamePattern: /(putJob|handle).*/
   })
   public async handleErrors(data: Metadata) {

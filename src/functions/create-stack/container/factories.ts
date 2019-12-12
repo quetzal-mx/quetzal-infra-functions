@@ -1,5 +1,5 @@
 import { Container, interfaces } from 'inversify';
-import { S3Downloader } from '../../../s3-downloader';
+import { S3Downloader } from '../../../s3';
 import { JSZip } from '../../../zip';
 import * as CloudFormation from 'aws-sdk/clients/cloudformation';
 

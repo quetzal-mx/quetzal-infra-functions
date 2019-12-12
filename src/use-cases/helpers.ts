@@ -17,3 +17,18 @@ export const getCreateStackUseCaseDataFromEvent = (event: CodePipelineEvent) => 
     fileName: userParameters.fileName,
   }
 };
+
+export const getUploadZipS3UseCaseDataFromEvent = (event: CodePipelineEvent) => {
+  const artifacts = event['CodePipeline.job'].data.inputArtifacts[0];
+  const { location } = artifacts;
+  const userParameters = useParametersfromEvent(event);
+
+  return {
+    metaDataFileName: userParameters.metaDataFileName,
+    sourceFileName: userParameters.sourceFileName,
+    zipKey: location.s3Location.objectKey,
+    zipSourceBucket: location.s3Location.bucketName,
+    stackName: userParameters.stackName,
+    destinationBucketLogicalId: userParameters.destinationBucketLogicalId,
+  }
+}

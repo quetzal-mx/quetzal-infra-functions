@@ -1,19 +1,18 @@
 import { CodePipelineEvent } from 'aws-lambda';
 import { v4 } from 'uuid';
 
-export const createDummyCreateStackEvent = (): CodePipelineEvent => ({
+interface CodePipelineEventConfiguration {
+  FunctionName: string;
+  UserParameters: string;
+}
+
+const getBaseEvent = (configuration: CodePipelineEventConfiguration): CodePipelineEvent => ({
   'CodePipeline.job': {
     accountId: v4(),
     id: v4(),
     data: {
       actionConfiguration: {
-        configuration: {
-          FunctionName: v4(),
-          UserParameters: JSON.stringify({
-            stackName: v4(),
-            fileName: v4(),
-          }),
-        }
+        configuration 
       },
       artifactCredentials: {
         accessKeyId: v4(),
@@ -37,3 +36,24 @@ export const createDummyCreateStackEvent = (): CodePipelineEvent => ({
     }
   }
 });
+
+export const createDummyCreateStackEvent = (): CodePipelineEvent => ( 
+  getBaseEvent({
+    FunctionName: v4(),
+    UserParameters: JSON.stringify({
+        stackName: v4(),
+        fileName: v4(),
+    }),
+}));
+
+export const createDummyUploadZipS3Event = (): CodePipelineEvent => (
+  getBaseEvent({
+    FunctionName: v4(),
+    UserParameters: JSON.stringify({
+        metadataFileName: v4(),
+        sourceFileName: v4(),
+        stackName: v4(),
+        destinationBucketLogicalId: v4(),
+    }),
+  })
+);
