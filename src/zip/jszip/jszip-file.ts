@@ -8,6 +8,7 @@ export class JSZipFile implements IZipFile{
   }
 
   public async file(name: string): Promise<Buffer> {
+    // TODO: excepcion si no existe el archivo
     return await this.jszip.file(name).async('nodebuffer');
   }
 }

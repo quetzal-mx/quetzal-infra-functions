@@ -32,8 +32,8 @@ export class UploadZipS3Handler {
     const jobId = event['CodePipeline.job'].id;
     const useCaseParams = getUploadZipS3UseCaseDataFromEvent(event);
     try {
-      await this.putJobSuccessResult(jobId);
       await useCase.execute(useCaseParams);
+      await this.putJobSuccessResult(jobId);
     } catch(_) {
       await this.putJobFailureResult(jobId);
     }
