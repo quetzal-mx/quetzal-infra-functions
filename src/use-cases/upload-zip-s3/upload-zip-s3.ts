@@ -59,7 +59,7 @@ export class UploadZipS3UseCase {
 
     await this.uploader.upload({ 
       bucket: destinationBucketName,
-      key: serverlessState.package.artifactDirectoryName,
+      key: `${serverlessState.package.artifactDirectoryName}/${sourceFileName}`,
       body: sourceFile,
     });
   }
