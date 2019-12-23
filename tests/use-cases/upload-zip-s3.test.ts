@@ -83,7 +83,7 @@ describe('UploadZipS3UseCase', () => {
       });
       expect(upload).toHaveBeenCalledWith({
         bucket: destinationBucket,
-        key: serverlessStateJSON['package']['artifactDirectoryName'],
+        key: `${serverlessStateJSON['package']['artifactDirectoryName']}/${sourceFileName}`,
         body: zipSourceFile,
       });
     });
