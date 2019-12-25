@@ -5,18 +5,21 @@ import { IUploadZipS3UseCaseDependencies, UploadZipS3UseCase } from '../../src/u
 describe('UploadZipS3UseCase', () => {
   describe('#execute', () => {
     let zip: IZipFile;
-    let zipSourceFile: Buffer;
     let downloadFile: jest.Mock;
 
     const zipKey = 'the/file/to/download.zip';
     const zipSourceBucket = 'source-bucket';
     const stackName = 'stackName';
-    const sourceFileName = 'source-code.zip';
     const metaDataFileName = 'serverless-state.json';
     const destinationBucketLogicalId = 'destination-bucket-logical-id';
 
     const serverlessState = generateServerlessState();
     const serverlessStateJSON = JSON.parse(serverlessState.toString()); 
+
+    const sourceFileNames = ['source-code.zip', 'another-source-code.zip'];
+    const sourceFiles: Array<{fileName: string, buffer: Buffer}> = [
+      {fileName: metaDataFileName, buffer: serverlessState}
+    ];
 
     const destinationBucket = 'destination-bucket';
     const describeStackResource = jest.fn().mockReturnValue({
@@ -51,12 +54,11 @@ describe('UploadZipS3UseCase', () => {
     });
 
     beforeAll(async () => {
-      zipSourceFile = await promisedRandomBytes(256);
+      for (let fileName of sourceFileNames) {
+        sourceFiles.push({fileName, buffer: await promisedRandomBytes(5)});
+      }
 
-      zip = await generateJSZip([
-        { fileName: sourceFileName, buffer: zipSourceFile },
-        { fileName: metaDataFileName, buffer: serverlessState }
-      ]);
+      zip = await generateJSZip(sourceFiles);
 
       downloadFile = jest.fn().mockResolvedValue(zip);
     });
@@ -66,7 +68,7 @@ describe('UploadZipS3UseCase', () => {
 
       await useCase.execute({
         metaDataFileName,
-        sourceFileName,
+        sourceFileNames,
         zipKey,
         zipSourceBucket,
         stackName,
@@ -81,10 +83,15 @@ describe('UploadZipS3UseCase', () => {
         StackName: stackName,
         LogicalResourceId: destinationBucketLogicalId
       });
-      expect(upload).toHaveBeenCalledWith({
+      expect(upload).toHaveBeenNthCalledWith(1, {
         bucket: destinationBucket,
-        key: `${serverlessStateJSON['package']['artifactDirectoryName']}/${sourceFileName}`,
-        body: zipSourceFile,
+        key: `${serverlessStateJSON['package']['artifactDirectoryName']}/${sourceFileNames[0]}`,
+        body: sourceFiles[1].buffer,
+      });
+      expect(upload).toHaveBeenNthCalledWith(2, {
+        bucket: destinationBucket,
+        key: `${serverlessStateJSON['package']['artifactDirectoryName']}/${sourceFileNames[1]}`,
+        body: sourceFiles[2].buffer,
       });
     });
   });

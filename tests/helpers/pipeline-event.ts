@@ -51,7 +51,7 @@ export const createDummyUploadZipS3Event = (): CodePipelineEvent => (
     FunctionName: v4(),
     UserParameters: JSON.stringify({
         metadataFileName: v4(),
-        sourceFileName: v4(),
+        sourceFileNames: [v4(), v4()],
         stackName: v4(),
         destinationBucketLogicalId: v4(),
     }),

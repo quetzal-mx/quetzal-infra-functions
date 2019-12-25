@@ -22,6 +22,7 @@ functions:
     handler: src/functions/upload-zip-s3/index.handle
     timeout: 60
 
+# TODO: cambiar tiempo de retencion de los logs
 resources:
   Resources:
     IamRoleLambdaExecution:

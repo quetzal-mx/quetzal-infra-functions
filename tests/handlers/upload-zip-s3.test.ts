@@ -9,7 +9,7 @@ describe('UploadZipS3Handler', () => {
     const {
       metaDataFileName,
       destinationBucketLogicalId,
-      sourceFileName,
+      sourceFileNames,
       stackName,
       zipKey,
       zipSourceBucket,
@@ -41,7 +41,7 @@ describe('UploadZipS3Handler', () => {
 
       expect(execute).toHaveBeenCalledWith({
         metaDataFileName,
-        sourceFileName,
+        sourceFileNames,
         zipKey,
         zipSourceBucket,
         stackName,
