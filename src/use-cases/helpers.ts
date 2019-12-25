@@ -1,4 +1,5 @@
 import { CodePipelineEvent } from 'aws-lambda';
+import { IUploadZipS3UseCaseParams } from './upload-zip-s3';
 
 export const useParametersfromEvent = (event: CodePipelineEvent) => {
   const { configuration } = event['CodePipeline.job'].data.actionConfiguration;
@@ -18,14 +19,14 @@ export const getCreateStackUseCaseDataFromEvent = (event: CodePipelineEvent) => 
   }
 };
 
-export const getUploadZipS3UseCaseDataFromEvent = (event: CodePipelineEvent) => {
+export const getUploadZipS3UseCaseDataFromEvent = (event: CodePipelineEvent): IUploadZipS3UseCaseParams => {
   const artifacts = event['CodePipeline.job'].data.inputArtifacts[0];
   const { location } = artifacts;
   const userParameters = useParametersfromEvent(event);
 
   return {
     metaDataFileName: userParameters.metaDataFileName,
-    sourceFileName: userParameters.sourceFileName,
+    sourceFileNames: userParameters.sourceFileNames,
     zipKey: location.s3Location.objectKey,
     zipSourceBucket: location.s3Location.bucketName,
     stackName: userParameters.stackName,

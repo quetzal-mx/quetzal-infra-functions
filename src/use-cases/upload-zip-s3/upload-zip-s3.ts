@@ -12,7 +12,7 @@ export interface IUploadZipS3UseCaseDependencies {
 
 export interface IUploadZipS3UseCaseParams {
   metaDataFileName: string;
-  sourceFileName: string;
+  sourceFileNames: Array<string>;
   zipKey: string;
   zipSourceBucket: string;
   stackName: string;
@@ -44,7 +44,7 @@ export class UploadZipS3UseCase {
   public async execute(params: IUploadZipS3UseCaseParams) {
     const {
       metaDataFileName,
-      sourceFileName,
+      sourceFileNames,
       zipKey,
       zipSourceBucket,
       stackName,
@@ -55,13 +55,16 @@ export class UploadZipS3UseCase {
 
     const serverlessState = await this.parseServerlessState(zipFile, metaDataFileName);
     const destinationBucketName = await this.getBucketName(destinationBucketLogicalId, stackName);
-    const sourceFile = await zipFile.file(sourceFileName);
 
-    await this.uploader.upload({ 
-      bucket: destinationBucketName,
-      key: `${serverlessState.package.artifactDirectoryName}/${sourceFileName}`,
-      body: sourceFile,
-    });
+    for (let sourceFileName of sourceFileNames) {
+      const sourceFile = await zipFile.file(sourceFileName);
+
+      await this.uploader.upload({ 
+        bucket: destinationBucketName,
+        key: `${serverlessState.package.artifactDirectoryName}/${sourceFileName}`,
+        body: sourceFile,
+      });
+    }
   }
 
   private async parseServerlessState(zipFile: IZipFile, metadataFileName: string): Promise<IServerlessState> {
